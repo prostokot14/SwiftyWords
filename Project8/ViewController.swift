@@ -198,6 +198,16 @@ final class ViewController: UIViewController {
         present(alertController, animated: true)
     }
 
+    private func isAllButtonsPressed() -> Bool {
+        for activatedButton in activatedButtons {
+            if !activatedButton.isHidden {
+                return false
+            }
+        }
+
+        return true
+    }
+
     @objc private func submitButtonTapped(_ sender: UIButton) {
         guard let currentAnswerText = currentAnswerLabel.text else {
             return
@@ -205,6 +215,7 @@ final class ViewController: UIViewController {
 
         if let solutionPosition = solutions.firstIndex(of: currentAnswerText) {
             activatedButtons.removeAll()
+            solutions.remove(at: solutionPosition)
 
             var splitAnswers = answersLabel.text?.components(separatedBy: .newlines)
             splitAnswers?[solutionPosition] = currentAnswerText
@@ -213,23 +224,24 @@ final class ViewController: UIViewController {
             currentAnswerLabel.text = ""
             score += 1
 
-            if score % 7 == 0 {
-                let alertController = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
-                present(alertController, animated: true)
+            if isAllButtonsPressed() {
+                showAlert(title: "Well done!", message: "Are you ready for the next level?", actionHandler: levelUp(alertAction:))
             }
         } else {
+            score -= 1
+
             showAlert(title: "Wrond answer!", message: "Your answer isn't correct. Try again!") { [weak self] _ in
                 guard let self else {
                     return
                 }
+
+                self.currentAnswerLabel.text = ""
 
                 for activatedButton in activatedButtons {
                     activatedButton.isHidden = false
                 }
 
                 self.activatedButtons.removeAll()
-                self.currentAnswerLabel.text = ""
             }
         }
     }
