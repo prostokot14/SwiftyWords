@@ -192,6 +192,12 @@ final class ViewController: UIViewController {
         }
     }
 
+    private func showAlert(title: String, message: String, actionHandler: @escaping (UIAlertAction) -> Void) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: actionHandler))
+        present(alertController, animated: true)
+    }
+
     @objc private func submitButtonTapped(_ sender: UIButton) {
         guard let currentAnswerText = currentAnswerLabel.text else {
             return
@@ -211,6 +217,19 @@ final class ViewController: UIViewController {
                 let alertController = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
                 present(alertController, animated: true)
+            }
+        } else {
+            showAlert(title: "Wrond answer!", message: "Your answer isn't correct. Try again!") { [weak self] _ in
+                guard let self else {
+                    return
+                }
+
+                for activatedButton in activatedButtons {
+                    activatedButton.isHidden = false
+                }
+
+                self.activatedButtons.removeAll()
+                self.currentAnswerLabel.text = ""
             }
         }
     }
