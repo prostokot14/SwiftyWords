@@ -154,12 +154,56 @@ final class ViewController: UIViewController {
         }
     }
 
+    private func levelUp(alertAction: UIAlertAction) {
+        level += 1
+        solutions.removeAll(keepingCapacity: true)
+        loadLevel()
+
+        for activatedButton in activatedButtons {
+            activatedButton.isHidden = false
+        }
+    }
+
     @objc private func submitButtonTapped(_ sender: UIButton) {
+        guard let currentAnswerText = currentAnswerLabel.text else {
+            return
+        }
+
+        if let solutionPosition = solutions.firstIndex(of: currentAnswerText) {
+            activatedButtons.removeAll()
+
+            var splitAnswers = answersLabel.text?.components(separatedBy: .newlines)
+            splitAnswers?[solutionPosition] = currentAnswerText
+            answersLabel.text = splitAnswers?.joined(separator: "\n")
+
+            currentAnswerLabel.text = ""
+            score += 1
+
+            if score % 7 == 0 {
+                let alertController = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
+                present(alertController, animated: true)
+            }
+        }
     }
 
     @objc private func clearButtonTapped(_ sender: UIButton) {
+        currentAnswerLabel.text = ""
+
+        for activatedButton in activatedButtons {
+            activatedButton.isHidden = false
+        }
+
+        activatedButtons.removeAll()
     }
 
     @objc private func letterButtonTapped(_ sender: UIButton) {
+        guard let buttonTitle = sender.titleLabel?.text else {
+            return
+        }
+
+        currentAnswerLabel.text = currentAnswerLabel.text?.appending(buttonTitle)
+        activatedButtons.append(sender)
+        sender.isHidden = true
     }
 }

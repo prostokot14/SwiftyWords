@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CBD564182A2DFEC100A35268 /* level1.txt in Resources */ = {isa = PBXBuildFile; fileRef = CBD564172A2DFEC100A35268 /* level1.txt */; };
+		CBD5641A2A2E141900A35268 /* level2.txt in Resources */ = {isa = PBXBuildFile; fileRef = CBD564192A2E141900A35268 /* level2.txt */; };
 		CBE824BE2A2D0BF500D69EA4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE824BD2A2D0BF500D69EA4 /* AppDelegate.swift */; };
 		CBE824C02A2D0BF500D69EA4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE824BF2A2D0BF500D69EA4 /* SceneDelegate.swift */; };
 		CBE824C22A2D0BF500D69EA4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE824C12A2D0BF500D69EA4 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		CBD564172A2DFEC100A35268 /* level1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level1.txt; sourceTree = "<group>"; };
+		CBD564192A2E141900A35268 /* level2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level2.txt; sourceTree = "<group>"; };
 		CBE824BA2A2D0BF500D69EA4 /* Project8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Project8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE824BD2A2D0BF500D69EA4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBE824BF2A2D0BF500D69EA4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				CBE824C82A2D0BF900D69EA4 /* LaunchScreen.storyboard */,
 				CBE824CB2A2D0BF900D69EA4 /* Info.plist */,
 				CBD564172A2DFEC100A35268 /* level1.txt */,
+				CBD564192A2E141900A35268 /* level2.txt */,
 			);
 			path = Project8;
 			sourceTree = "<group>";
@@ -128,6 +131,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBD5641A2A2E141900A35268 /* level2.txt in Resources */,
 				CBE824CA2A2D0BF900D69EA4 /* LaunchScreen.storyboard in Resources */,
 				CBD564182A2DFEC100A35268 /* level1.txt in Resources */,
 				CBE824C72A2D0BF900D69EA4 /* Assets.xcassets in Resources */,
