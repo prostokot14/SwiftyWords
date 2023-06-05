@@ -60,12 +60,36 @@ final class ViewController: UIViewController {
         let submitButton = UIButton(type: .system)
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.setTitle("SUBMIT", for: .normal)
+        submitButton.layer.borderWidth = 1
+        submitButton.layer.borderColor = UIColor.lightGray.cgColor
+        submitButton.layer.cornerRadius = 10
+
+        if #available(iOS 15.0, *) {
+            submitButton.configuration = UIButton.Configuration.plain()
+            submitButton.configuration?.contentInsets.leading = 15
+            submitButton.configuration?.contentInsets.trailing = 15
+        } else {
+            submitButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        }
+
         submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
         view.addSubview(submitButton)
 
         let clearButton = UIButton(type: .system)
         clearButton.translatesAutoresizingMaskIntoConstraints = false
         clearButton.setTitle("CLEAR", for: .normal)
+        clearButton.layer.borderWidth = 1
+        clearButton.layer.borderColor = UIColor.lightGray.cgColor
+        clearButton.layer.cornerRadius = 10
+
+        if #available(iOS 15.0, *) {
+            clearButton.configuration = UIButton.Configuration.plain()
+            clearButton.configuration?.contentInsets.leading = 15
+            clearButton.configuration?.contentInsets.trailing = 15
+        } else {
+            clearButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        }
+
         clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
         view.addSubview(clearButton)
 
