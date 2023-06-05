@@ -8,11 +8,15 @@
 import UIKit
 
 final class ViewController: UIViewController {
-    var cluesLabel: UILabel!
-    var answersLabel: UILabel!
-    var currentAnswerLabel: UITextField!
-    var scoreLabel: UILabel!
-    var letterButtons = [UIButton]()
+    private var cluesLabel: UILabel!
+    private var answersLabel: UILabel!
+    private var currentAnswerLabel: UITextField!
+    private var scoreLabel: UILabel!
+    private var letterButtons = [UIButton]()
+    private var activatedButtons = [UIButton]()
+    private var solutions = [String]()
+    private var score = 0
+    private var level = 1
 
     override func loadView() {
         view = UIView()
@@ -52,11 +56,13 @@ final class ViewController: UIViewController {
         let submitButton = UIButton(type: .system)
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.setTitle("SUBMIT", for: .normal)
+        submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
         view.addSubview(submitButton)
 
         let clearButton = UIButton(type: .system)
         clearButton.translatesAutoresizingMaskIntoConstraints = false
         clearButton.setTitle("CLEAR", for: .normal)
+        clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
         view.addSubview(clearButton)
 
         let buttonsView = UIView()
@@ -98,6 +104,7 @@ final class ViewController: UIViewController {
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
                 letterButton.setTitle("WWW", for: .normal)
                 letterButton.frame = CGRect(x: column * letterButtonWidth, y: row * letterButtonHeight, width: letterButtonWidth, height: letterButtonHeight)
+                letterButton.addTarget(self, action: #selector(letterButtonTapped), for: .touchUpInside)
                 buttonsView.addSubview(letterButton)
 
                 letterButtons.append(letterButton)
@@ -107,6 +114,52 @@ final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        loadLevel()
+    }
+
+    private func loadLevel() {
+        var clueString = ""
+        var solutionString = ""
+        var letterBits = [String]()
+
+        if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt"), let levelContents = try? String(contentsOf: levelFileURL) {
+            var lines = levelContents.components(separatedBy: .newlines)
+            lines.shuffle()
+
+            for (index, line) in lines.enumerated() {
+                let parts = line.components(separatedBy: ": ")
+                let answer = parts[0]
+                let clue = parts[1]
+
+                clueString += "\(index + 1). \(clue)\n"
+
+                let solutionWord = answer.replacingOccurrences(of: "|", with: "")
+                solutionString += "\(solutionWord.count) letters\n"
+                solutions.append(solutionWord)
+
+                letterBits += answer.components(separatedBy: "|")
+            }
+        }
+
+        cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
+        answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        letterBits.shuffle()
+
+        if letterBits.count == letterButtons.count {
+            for i in 0..<letterButtons.count {
+                letterButtons[i].setTitle(letterBits[i], for: .normal)
+            }
+        }
+    }
+
+    @objc private func submitButtonTapped(_ sender: UIButton) {
+    }
+
+    @objc private func clearButtonTapped(_ sender: UIButton) {
+    }
+
+    @objc private func letterButtonTapped(_ sender: UIButton) {
     }
 }
