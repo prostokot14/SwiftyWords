@@ -147,11 +147,12 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        performSelector(inBackground: #selector(loadLevel), with: nil)
         loadLevel()
     }
 
     // MARK: - Private Methods
-    private func loadLevel() {
+    @objc private func loadLevel() {
         var clueString = ""
         var solutionString = ""
         var letterBits = [String]()
@@ -175,14 +176,16 @@ final class ViewController: UIViewController {
             }
         }
 
-        cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
-        answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        letterBits.shuffle()
-
-        if letterBits.count == letterButtons.count {
-            for i in 0..<letterButtons.count {
-                letterButtons[i].setTitle(letterBits[i], for: .normal)
+        DispatchQueue.main.async { [weak self] in
+            self?.cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
+            self?.answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            letterBits.shuffle()
+            
+            if let letterButtons = self?.letterButtons, letterBits.count == letterButtons.count {
+                for i in 0..<letterButtons.count {
+                    letterButtons[i].setTitle(letterBits[i], for: .normal)
+                }
             }
         }
     }
