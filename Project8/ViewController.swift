@@ -8,10 +8,13 @@
 import UIKit
 
 final class ViewController: UIViewController {
+    // MARK: - Visual Components
     private var cluesLabel: UILabel!
     private var answersLabel: UILabel!
     private var currentAnswerLabel: UITextField!
     private var scoreLabel: UILabel!
+
+    // MARK: - Private Properties
     private var letterButtons = [UIButton]()
     private var activatedButtons = [UIButton]()
     private var solutions = [String]()
@@ -22,6 +25,7 @@ final class ViewController: UIViewController {
         }
     }
 
+    // MARK: - UIViewController
     override func loadView() {
         view = UIView()
         view.backgroundColor = .systemBackground
@@ -146,6 +150,7 @@ final class ViewController: UIViewController {
         loadLevel()
     }
 
+    // MARK: - Private Methods
     private func loadLevel() {
         var clueString = ""
         var solutionString = ""
