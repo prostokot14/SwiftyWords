@@ -132,7 +132,8 @@ final class ViewController: UIViewController {
 
         for row in 0..<4 {
             for column in 0..<5 {
-                let letterButton = UIButton(type: .system)
+                let letterButton = UIButton(type: .custom)
+                letterButton.setTitleColor(view.tintColor, for: .normal)
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
                 letterButton.setTitle("WWW", for: .normal)
                 letterButton.frame = CGRect(x: column * letterButtonWidth, y: row * letterButtonHeight, width: letterButtonWidth, height: letterButtonHeight)
@@ -152,6 +153,38 @@ final class ViewController: UIViewController {
     }
 
     // MARK: - Private Methods
+    private func levelUp(alertAction: UIAlertAction) {
+        level += 1
+        solutions.removeAll(keepingCapacity: true)
+        loadLevel()
+
+        for activatedButton in activatedButtons {
+            activatedButton.isHidden = false
+        }
+    }
+
+    private func showAlert(title: String, message: String, actionHandler: @escaping (UIAlertAction) -> Void) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: actionHandler))
+        present(alertController, animated: true)
+    }
+
+    private func isAllButtonsPressed() -> Bool {
+        for activatedButton in activatedButtons {
+            if !activatedButton.isHidden {
+                return false
+            }
+        }
+
+        return true
+    }
+    
+    private func makeButtonsActive(_ bool: Bool) {
+        for button in letterButtons {
+            button.isEnabled = bool
+        }
+    }
+    
     @objc private func loadLevel() {
         var clueString = ""
         var solutionString = ""
@@ -190,33 +223,8 @@ final class ViewController: UIViewController {
         }
     }
 
-    private func levelUp(alertAction: UIAlertAction) {
-        level += 1
-        solutions.removeAll(keepingCapacity: true)
-        loadLevel()
-
-        for activatedButton in activatedButtons {
-            activatedButton.isHidden = false
-        }
-    }
-
-    private func showAlert(title: String, message: String, actionHandler: @escaping (UIAlertAction) -> Void) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: actionHandler))
-        present(alertController, animated: true)
-    }
-
-    private func isAllButtonsPressed() -> Bool {
-        for activatedButton in activatedButtons {
-            if !activatedButton.isHidden {
-                return false
-            }
-        }
-
-        return true
-    }
-
-    @objc private func submitButtonTapped(_ sender: UIButton) {
+    @objc
+    private func submitButtonTapped(_ sender: UIButton) {
         guard let currentAnswerText = currentAnswerLabel.text else {
             return
         }
@@ -254,23 +262,40 @@ final class ViewController: UIViewController {
         }
     }
 
-    @objc private func clearButtonTapped(_ sender: UIButton) {
+    @objc
+    private func clearButtonTapped(_ sender: UIButton) {
         currentAnswerLabel.text = ""
 
         for activatedButton in activatedButtons {
             activatedButton.isHidden = false
+            
+            UIView.animate(withDuration: 1, animations: {
+                activatedButton.alpha = 1
+            }) { _ in
+                self.makeButtonsActive(true)
+            }
         }
 
         activatedButtons.removeAll()
     }
 
-    @objc private func letterButtonTapped(_ sender: UIButton) {
+    @objc
+    private func letterButtonTapped(_ sender: UIButton) {
         guard let buttonTitle = sender.titleLabel?.text else {
             return
         }
+        
+        makeButtonsActive(false)
 
         currentAnswerLabel.text = currentAnswerLabel.text?.appending(buttonTitle)
         activatedButtons.append(sender)
-        sender.isHidden = true
+        
+        UIView.animate(withDuration: 1, animations: {
+            sender.alpha = 0
+        }) { _ in
+            sender.isHidden = true
+            self.makeButtonsActive(true)
+        }
     }
 }
+
